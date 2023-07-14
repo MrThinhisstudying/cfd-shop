@@ -19,12 +19,17 @@ const ProductCard = ({ product }) => {
   return (
     <div className="product product-2">
       <figure className="product-media">
-        <Link to={PATHS.PRODUCT + `/${slug}`}>
+        <Link to={PATHS.PRODUCT + `/${slug}`} style={{ height: 275 }}>
           {images?.length > 0 ? (
             <img
               src={images[0]}
               alt="Product image"
               className="product-image"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
             />
           ) : (
             <ImageWrapper>

@@ -10,7 +10,7 @@ export const productService = {
   getCategories(query = "") {
     return axiosInstance.get(`/product-categories${query}`);
   },
-  getCategories(slug = "") {
+  getCategoriesBySlug(slug = "") {
     return axiosInstance.get(`/product-categories/${slug}`);
   },
 };

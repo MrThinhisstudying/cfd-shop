@@ -14,7 +14,6 @@ const useQuery = (promise, dependencies = []) => {
       setLoading(true);
       const res = await promise(query);
       setData(res.data?.data);
-      console.log(res);
     } catch (error) {
       console.log("Error: ", error);
       setError(error);

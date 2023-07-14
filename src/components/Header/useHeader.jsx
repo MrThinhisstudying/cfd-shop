@@ -8,7 +8,6 @@ import useAuthenModal from "../AuthenModal/useAuthenModal";
 const useHeader = () => {
   const { openAuthenModal } = useMainContext();
   const { profile } = useSelector((state) => state.auth);
-  console.log("Profile: ", profile);
   const dispatch = useDispatch();
   const onLogout = () => {
     dispatch(authAction.logout());

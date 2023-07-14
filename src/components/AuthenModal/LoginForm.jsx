@@ -18,7 +18,7 @@ const LoginForm = ({ onLogin }) => {
       onLogin(data);
       console.log("Data: ", data);
       if (rememberMe) {
-        localStorage.setItem("account", JSON.stringify(data));
+        localStorage.setItem("email", JSON.stringify(data.email));
       }
     }
   };

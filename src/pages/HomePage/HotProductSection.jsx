@@ -11,11 +11,13 @@ const HotProductSection = ({ hotProducts, selectedHotTab, onSelectHotTab }) => {
   }, [hotProducts]);
 
   const onTabChange = (tab) => {
-    setRenderedProducts([]);
-    console.log("Click");
-    setTimeout(() => {
-      onSelectHotTab?.(tab);
-    }, 300);
+    if (tab !== selectedHotTab) {
+      setRenderedProducts([]);
+      console.log("Click");
+      setTimeout(() => {
+        onSelectHotTab?.(tab);
+      }, 300);
+    }
   };
 
   return (

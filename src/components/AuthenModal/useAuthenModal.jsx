@@ -9,7 +9,6 @@ const useAuthenModal = () => {
   const dispatch = useDispatch();
   const { isAuthenModalOpen, closeAuthenModal, authenForm, setAuthenForm } =
     useMainContext();
-  console.log("isAuthenModalOpen: ", isAuthenModalOpen);
 
   const onChangeTab = (tab) => {
     setAuthenForm(tab);
