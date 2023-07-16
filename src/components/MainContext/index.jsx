@@ -1,11 +1,21 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { AUTHEN_TYPE } from "../../contant/authenModal";
+import useAuthenModal from "../AuthenModal/useAuthenModal";
+import { LOCAL_STORAGE } from "../../contant/localStorage";
 
 const MainContext = createContext({});
 
 export const MainContextProvider = ({ children }) => {
   const [isAuthenModalOpen, setIsAuthenModalOpen] = useState(false);
   const [authenForm, setAuthenForm] = useState(AUTHEN_TYPE.login);
+  const { onGetProfile } = useAuthenModal();
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem(LOCAL_STORAGE.token);
+    if (accessToken) {
+      onGetProfile();
+    }
+  }, []);
 
   const openAuthenModal = () => {
     setIsAuthenModalOpen(true);

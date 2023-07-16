@@ -1,9 +1,10 @@
 import { useMainContext } from "../MainContext";
 import { useDispatch } from "react-redux";
-import { login } from "../../store/reducers/authReducer";
+import { authAction, login } from "../../store/reducers/authReducer";
 import { unwrapResult } from "@reduxjs/toolkit";
 import { message } from "antd";
 import { authService } from "../../services/authService";
+import { getCart } from "../../store/reducers/cartReducer";
 
 const useAuthenModal = () => {
   const dispatch = useDispatch();
@@ -70,6 +71,19 @@ const useAuthenModal = () => {
       }
     }
   };
+  //Get profile
+  const onGetProfile = async () => {
+    try {
+      const profileRes = await authService.getProfile();
+      console.log("ProfileRes:", profileRes?.data?.data);
+      if (profileRes?.data?.data) {
+        dispatch(authAction.setProfile(profileRes?.data?.data));
+        dispatch(getCart());
+      }
+    } catch (error) {
+      console.log("error: ", error);
+    }
+  };
   return {
     isOpen: isAuthenModalOpen,
     activeTab: authenForm,
@@ -77,6 +91,7 @@ const useAuthenModal = () => {
     onClose,
     onLogin,
     onRegister,
+    onGetProfile,
   };
 };
 

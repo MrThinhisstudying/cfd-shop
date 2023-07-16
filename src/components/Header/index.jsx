@@ -3,11 +3,11 @@ import HeaderTop from "./HeaderTop";
 import HeaderMiddle from "./HeaderMiddle";
 import useHeader from "./useHeader";
 const Header = () => {
-  const headerProps = useHeader();
+  const { headerProps, headerMiddleProps } = useHeader();
   return (
     <header className="header">
       <HeaderTop {...headerProps} />
-      <HeaderMiddle />
+      <HeaderMiddle {...headerMiddleProps} />
     </header>
   );
 };

@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import AuthenModal from "../components/AuthenModal";
 import MobileMenu from "../components/MobileMenu";
 import { MainContextProvider } from "../components/MainContext";
-import { libFunc } from "../contant/libFunc";
+import { libFunc } from "../assets/js/main";
 
 const MainLayout = () => {
   const { pathname } = useLocation();

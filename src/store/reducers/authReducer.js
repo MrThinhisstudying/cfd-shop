@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { LOCAL_STORAGE } from "../../contant/localStorage";
 import { authService } from "../../services/authService";
+import { getCart } from "./cartReducer";
 
 const initialState = {
   profile: null,
@@ -33,6 +34,7 @@ export const login = createAsyncThunk(
       const profileRes = await authService.getProfile();
       console.log("Profile: ", profileRes);
       thunkAPI.dispatch(authAction.setProfile(profileRes?.data?.data));
+      thunkAPI.dispatch(getCart());
       return profileRes?.data?.data;
     } catch (error) {
       console.log("Error: ", error);

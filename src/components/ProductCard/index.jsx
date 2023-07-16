@@ -2,8 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 import { PATHS } from "../../contant/pathnames";
-import { Empty } from "antd";
+import { Empty, message } from "antd";
 import { formatCurrency } from "../../utils/format";
+import { useMainContext } from "../MainContext";
+import { useDispatch, useSelector } from "react-redux";
+import { checkAuthen } from "../../utils/checkAuthen";
+import { THUNK_STATUS } from "../../contant/thunkStatus";
+import { CART_MESSAGE, GENERAL_MESSAGE } from "../../contant/message";
+import { updateCart } from "../../store/reducers/cartReducer";
 
 const ImageWrapper = styled.div`
   width: 100%;
@@ -15,7 +21,59 @@ const ImageWrapper = styled.div`
 `;
 
 const ProductCard = ({ product }) => {
-  const { slug, title, price, rating, images } = product || {};
+  const { id, slug, title, price, rating, images } = product || {};
+  const { openAuthenModal } = useMainContext();
+  const { cartInfo, updateStatus } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+
+  const onAddToCart = async () => {
+    const isLogin = checkAuthen();
+    if (!isLogin) {
+      openAuthenModal();
+    } else if (id && updateStatus !== THUNK_STATUS.pending) {
+      try {
+        let addPayLoad = {};
+        if (cartInfo.id) {
+          const matchIndex = cartInfo.product?.findIndex(
+            (product) => product.id === id
+          );
+          const newProductPayload = cartInfo.product?.map((product) => {
+            return product.id;
+          });
+          const newQuantityPayload = [...cartInfo.quantity];
+          if (matchIndex > -1) {
+            newQuantityPayload[matchIndex] = (
+              Number(newQuantityPayload[matchIndex]) + 1
+            ).toString();
+          } else {
+            newProductPayload.push(id);
+            newQuantityPayload.push("1");
+          }
+          addPayLoad = {
+            ...cartInfo,
+            product: newProductPayload,
+            quantity: newQuantityPayload,
+          };
+        } else {
+          addPayLoad = {
+            product: [id],
+            quantity: ["1"],
+            subTotal: 0,
+            totalProduct: ["string"],
+            discound: 0,
+            paymentMethod: "string",
+          };
+        }
+        const res = await dispatch(updateCart(addPayLoad)).unwrap();
+        if (res.id) {
+          message.success(CART_MESSAGE.atcSuccesss);
+        }
+      } catch (error) {
+        console.log("error: ", error);
+        message.error(GENERAL_MESSAGE.error);
+      }
+    }
+  };
   return (
     <div className="product product-2">
       <figure className="product-media">
@@ -43,14 +101,19 @@ const ProductCard = ({ product }) => {
           </a>
         </div>
         <div className="product-action product-action-dark">
-          <a href="#" className="btn-product btn-cart" title="Add to cart">
+          <a
+            role="button"
+            className="btn-product btn-cart"
+            title="Add to cart"
+            onClick={onAddToCart}
+          >
             <span>add to cart</span>
           </a>
         </div>
       </figure>
       <div className="product-body">
         <h3 className="product-title">
-          <a href="product-detail.html">{title}</a>
+          <Link to={PATHS.PRODUCT + `/${slug}`}>{title || ""}</Link>
         </h3>
         <div className="product-price"> ${formatCurrency(price || 0)}</div>
         <div className="ratings-container">

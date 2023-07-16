@@ -14,7 +14,7 @@ const DealSection = () => {
               className="deal"
               style={{
                 backgroundImage:
-                  'url("/src/assets/images/demos/demo-3/deal/bg-1.jpg")',
+                  'url("/assets/images/demos/demo-3/deal/bg-1.jpg")',
               }}
             >
               <div className="deal-top">
@@ -52,7 +52,7 @@ const DealSection = () => {
                       </span>
                       <a href="product-detail.html">
                         <img
-                          src="/src/assets/images/demos/demo-3/products/product-5.jpg"
+                          src="assets/images/demos/demo-3/products/product-5.jpg"
                           alt="Product image"
                           className="product-image"
                         />
@@ -105,7 +105,7 @@ const DealSection = () => {
                       </span>
                       <a href="product-detail.html">
                         <img
-                          src="/src/assets/images/demos/demo-3/products/product-6.jpg"
+                          src="assets/images/demos/demo-3/products/product-6.jpg"
                           alt="Product image"
                           className="product-image"
                         />

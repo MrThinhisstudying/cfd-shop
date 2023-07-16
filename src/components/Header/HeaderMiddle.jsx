@@ -1,7 +1,28 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import { PATHS } from "../../contant/pathnames";
-const HeaderMiddle = () => {
+import { Modal } from "antd";
+import { formatCurrency } from "../../utils/format";
+const HeaderMiddle = ({ products, total, totalProduct, onRemoveProduct }) => {
+  const { confirm } = Modal;
+  console.log("Product: ", products);
+  const onRemoveProductClick = (product) => {
+    confirm({
+      title: "Do you want remove this item from cart ?",
+      content: (
+        <>
+          <p>{`${product?.name}`}</p>
+          <p>{`${product?.quantity} x $${product?.price}`}</p>
+        </>
+      ),
+      onOk() {
+        onRemoveProduct?.(product?.id);
+      },
+      onCancel() {
+        console.log("Cancel"); // eslint-disable-line no-console
+      },
+    });
+  };
   return (
     <div className="header-middle sticky-header">
       <div className="container">
@@ -11,11 +32,7 @@ const HeaderMiddle = () => {
             <i className="icon-bars" />
           </button>
           <NavLink to={PATHS.HOME} className="logo">
-            <img
-              src="src/assets/images/logo.svg"
-              alt="Molla Logo"
-              width={160}
-            />
+            <img src="assets/images/logo.svg" alt="Molla Logo" width={160} />
           </NavLink>
         </div>
         <nav className="main-nav">
@@ -71,68 +88,71 @@ const HeaderMiddle = () => {
               data-display="static"
             >
               <i className="icon-shopping-cart" />
-              <span className="cart-count">2</span>
+              {!!totalProduct && (
+                <span className="cart-count">{totalProduct}</span>
+              )}
             </a>
             <div className="dropdown-menu dropdown-menu-right">
               <div className="dropdown-cart-products">
-                <div className="product">
-                  <div className="product-cart-details">
-                    <h4 className="product-title">
-                      <Link to={PATHS.PRODUCT_DETAIL}>Beige knitted</Link>
-                    </h4>
-                    <span className="cart-product-info">
-                      <span className="cart-product-qty">1</span> x $84.00{" "}
-                    </span>
-                  </div>
-                  <figure className="product-image-container">
-                    <Link to={PATHS.PRODUCT_DETAIL} className="product-image">
-                      <img
-                        src="src/assets/images/products/cart/product-1.jpg"
-                        alt="product"
-                      />
-                    </Link>
-                  </figure>
-                  <a href="#" className="btn-remove" title="Remove Product">
-                    <i className="icon-close" />
-                  </a>
-                </div>
-                <div className="product">
-                  <div className="product-cart-details">
-                    <h4 className="product-title">
-                      <Link to={PATHS.PRODUCT_DETAIL}>Blue utility</Link>
-                    </h4>
-                    <span className="cart-product-info">
-                      <span className="cart-product-qty">1</span> x $76.00{" "}
-                    </span>
-                  </div>
-                  <figure className="product-image-container">
-                    <Link to={PATHS.PRODUCT_DETAIL} className="product-image">
-                      <img
-                        src="/src/assets/images/products/cart/product-2.jpg"
-                        alt="product"
-                      />
-                    </Link>
-                  </figure>
-                  <a href="#" className="btn-remove" title="Remove Product">
-                    <i className="icon-close" />
-                  </a>
-                </div>
+                {products?.map((product, index) => {
+                  const { id, name, slug, quantity, price } = product || {};
+                  return (
+                    <div key={id || index} className="product">
+                      <div className="product-cart-details">
+                        <h4 className="product-title">
+                          <Link to={PATHS.PRODUCT + `/${slug}`}>{name}</Link>
+                        </h4>
+                        <span className="cart-product-info">
+                          <span className="cart-product-qty">{quantity}</span> x
+                          ${formatCurrency(price)}{" "}
+                        </span>
+                      </div>
+                      <figure className="product-image-container">
+                        <Link
+                          to={PATHS.PRODUCT + `/${slug}`}
+                          className="product-image"
+                        >
+                          <img
+                            src="assets/images/products/cart/product-1.jpg"
+                            alt="product"
+                          />
+                        </Link>
+                      </figure>
+                      <a
+                        role="button"
+                        className="btn-remove"
+                        title="Remove Product"
+                        onClick={() => onRemoveProductClick(product)}
+                      >
+                        <i className="icon-close" />
+                      </a>
+                    </div>
+                  );
+                })}
               </div>
               <div className="dropdown-cart-total">
                 <span>Total</span>
-                <span className="cart-total-price">$160.00</span>
+                <span className="cart-total-price">
+                  ${formatCurrency(total)}
+                </span>
               </div>
               <div className="dropdown-cart-action">
-                <Link to={PATHS.PRODUCT_CART} className="btn btn-primary">
-                  View Cart
-                </Link>
-                <Link
-                  to={PATHS.PRODUCT_CHECKOUT}
-                  className="btn btn-outline-primary-2"
-                >
-                  <span>Checkout</span>
-                  <i className="icon-long-arrow-right" />
-                </Link>
+                {products?.length > 0 ? (
+                  <>
+                    <Link to={PATHS.PRODUCT_CART} className="btn btn-primary">
+                      View Cart
+                    </Link>
+                    <Link
+                      to={PATHS.PRODUCT_CHECKOUT}
+                      className="btn btn-outline-primary-2"
+                    >
+                      <span>Checkout</span>
+                      <i className="icon-long-arrow-right" />
+                    </Link>
+                  </>
+                ) : (
+                  <p>There is no product in cart</p>
+                )}
               </div>
             </div>
           </div>

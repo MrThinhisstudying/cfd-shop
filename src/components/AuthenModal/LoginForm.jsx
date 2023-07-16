@@ -15,8 +15,11 @@ const LoginForm = ({ onLogin }) => {
   };
   const onSubmit = (data) => {
     if (data) {
-      onLogin(data);
-      console.log("Data: ", data);
+      const payload = {
+        email: data.email,
+        password: data.password,
+      };
+      onLogin(payload);
       if (rememberMe) {
         localStorage.setItem("email", JSON.stringify(data.email));
       }

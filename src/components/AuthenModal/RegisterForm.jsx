@@ -16,7 +16,13 @@ const RegisterForm = ({ onRegister }) => {
 
   const onSubmit = (data) => {
     if (data) {
-      onRegister?.(data);
+      const payload = {
+        firstName: "",
+        lastName: "",
+        email: data.email,
+        password: data.password,
+      };
+      onRegister?.(payload);
     }
   };
   return (
