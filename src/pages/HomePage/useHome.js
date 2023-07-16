@@ -28,7 +28,8 @@ const useHome = () => {
     error: homeDataError,
   } = useQuery(() => pageService.getPageDataByName("home"));
   const brands = homeData?.data?.brands || [];
-
+  const banners = homeData?.data?.banner || [];
+  const heroCategory = homeData?.data?.category || [];
   const {
     data: categoriesData,
     loading: categoriesLoading,
@@ -80,6 +81,11 @@ const useHome = () => {
     brands,
   };
 
+  const introSectionProps = {
+    banners,
+    heroCategory,
+  };
+
   //Featured Section
   const [selectedCateSlug, setSelectedCateSlug] = useState("all");
   const featuredProps = useMemo(() => {
@@ -119,6 +125,7 @@ const useHome = () => {
     getDealProps,
     isPageLoading,
     brandProps,
+    introSectionProps,
   };
 };
 

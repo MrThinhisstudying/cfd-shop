@@ -16,12 +16,13 @@ const HomePage = () => {
     isPageLoading,
     brandProps,
     getDealProps,
+    introSectionProps,
   } = useHome();
 
   if (isPageLoading) return <PageLoading />;
   return (
     <main className="main">
-      <IntroSection />
+      <IntroSection {...introSectionProps} />
       <HotProductSection {...hotProductProps} />
       <div className="mb-7 mb-lg-11" />
       <DealSection />

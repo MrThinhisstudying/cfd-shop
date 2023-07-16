@@ -1,6 +1,6 @@
 import React from "react";
 
-const IntroSection = () => {
+const IntroSection = ({ banner, heroCategory }) => {
   return (
     <div className="intro-section pt-3 pb-3 mb-2">
       <div className="container">

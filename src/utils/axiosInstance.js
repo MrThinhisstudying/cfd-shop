@@ -20,7 +20,6 @@ axiosInstance.interceptors.response.use(
         });
 
         const data = res?.data?.data;
-        console.log("data: ", data);
         //Lưu lại token mới vào local storage
         localStorage.setItem(LOCAL_STORAGE.token, data?.token);
         localStorage.setItem(LOCAL_STORAGE.refreshToken, data?.refreshToken);

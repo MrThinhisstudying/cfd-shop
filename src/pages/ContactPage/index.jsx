@@ -1,6 +1,47 @@
 import React from "react";
+import { useForm } from "react-hook-form";
+import Input from "../../components/Input";
+import { message } from "antd";
+import { GENERAL_MESSAGE } from "../../contant/message";
+import useMutation from "../../hooks/useMutation";
+import { subcribeService } from "../../services/subscribeService";
 
 const ContactPage = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const { excute, data, loading, error } = useMutation(
+    subcribeService.subscribeContact,
+    {
+      onSuccess: (data) => {
+        console.log("Data ", data);
+        message.success(GENERAL_MESSAGE.success);
+      },
+      onFail: (error) => {
+        console.log("Error ", error);
+        message.error(GENERAL_MESSAGE.error);
+      },
+    }
+  );
+  const onSubmit = (data) => {
+    console.log("data", data);
+    if (data) {
+      const payload = {
+        name: data?.name || "",
+        title: "",
+        email: data?.email || "",
+        description: data?.message || "",
+        phone: data?.phone || "",
+      };
+      excute(payload);
+      reset();
+    } else {
+      console.log("error: ", error);
+    }
+  };
   return (
     <main className="main">
       <nav aria-label="breadcrumb" className="breadcrumb-nav border-0 mb-0">
@@ -19,7 +60,7 @@ const ContactPage = () => {
         <div
           className="page-header page-header-big text-center"
           style={{
-            backgroundImage: 'url("/src/assets/images/contact-header-bg.jpg")',
+            backgroundImage: 'url("/assets/images/contact-header-bg.jpg")',
           }}
         >
           <h1 className="page-title text-white">
@@ -83,70 +124,86 @@ const ContactPage = () => {
               <p className="mb-2">
                 Use the form below to get in touch with the sales team
               </p>
-              <form action="#" className="contact-form mb-3">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="contact-form mb-3"
+              >
                 <div className="row">
                   <div className="col-sm-6">
-                    <label htmlFor="cname" className="sr-only">
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control input-error"
-                      id="cname"
-                      placeholder="Name *"
+                    <Input
+                      type="inputContact"
+                      label="Name"
                       required
+                      {...register("name", {
+                        required: "Please enter your name",
+                      })}
+                      error={errors?.name?.message || ""}
                     />
-                    <p className="form-error">Please fill in this field</p>
                   </div>
                   <div className="col-sm-6">
-                    <label htmlFor="cemail" className="sr-only">
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="cemail"
-                      placeholder="Email *"
+                    <Input
+                      type="inputContact"
+                      label="Name"
                       required
+                      {...register("email", {
+                        required: "Please enter your email",
+                        pattern: {
+                          value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                          message: "Plese enter email with format abc@def.com",
+                        },
+                      })}
+                      error={errors?.email?.message || ""}
                     />
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-sm-6">
-                    <label htmlFor="cphone" className="sr-only">
-                      Phone
-                    </label>
-                    <input
-                      type="tel"
-                      className="form-control"
-                      id="cphone"
-                      placeholder="Phone"
+                    <Input
+                      type="inputContact"
+                      label="Phone"
+                      required
+                      {...register("phone", {
+                        required: "Please enter your phone",
+                        pattern: {
+                          value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                          message: "Plese enter phone with format 094130xxxx",
+                        },
+                      })}
+                      error={errors?.phone?.message || ""}
                     />
                   </div>
                   <div className="col-sm-6">
-                    <label htmlFor="csubject" className="sr-only">
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="csubject"
-                      placeholder="Subject"
+                    <Input
+                      type="inputContact"
+                      label="Subject"
+                      {...register("subject", {
+                        required: "Please enter your subject",
+                      })}
+                      error={errors?.subject?.message || ""}
                     />
                   </div>
                 </div>
-                <label htmlFor="cmessage" className="sr-only">
-                  Message
-                </label>
-                <textarea
-                  className="form-control"
-                  cols={30}
-                  rows={4}
-                  id="cmessage"
+                <Input
+                  type="inputContact"
+                  label="Message"
+                  placeholder="Message"
                   required
-                  placeholder="Message *"
-                  defaultValue={""}
+                  renderInput={(inputProps) => (
+                    <textarea
+                      placeholder="Message"
+                      cols={30}
+                      rows={4}
+                      className={`form-control ${
+                        !!errors?.message?.message ? "input-error" : ""
+                      }`}
+                      {...register("message", {
+                        required: "Please enter your message",
+                      })}
+                    />
+                  )}
+                  error={errors?.message?.message || ""}
                 />
+
                 <button
                   type="submit"
                   className="btn btn-outline-primary-2 btn-minwidth-sm"
@@ -167,7 +224,7 @@ const ContactPage = () => {
                     <div className="col-sm-5 col-xl-6">
                       <figure className="store-media mb-2 mb-lg-0">
                         <img
-                          src="/src/assets/images/stores/img-1.jpg"
+                          src="/assets/images/stores/img-1.jpg"
                           alt="image"
                         />
                       </figure>
@@ -197,7 +254,7 @@ const ContactPage = () => {
                     <div className="col-sm-5 col-xl-6">
                       <figure className="store-media mb-2 mb-lg-0">
                         <img
-                          src="/src/assets/images/stores/img-2.jpg"
+                          src="/assets/images/stores/img-2.jpg"
                           alt="image"
                         />
                       </figure>

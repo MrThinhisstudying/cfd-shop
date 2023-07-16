@@ -1,5 +1,6 @@
 export const GENERAL_MESSAGE = {
   error: "Something wrong, please try again!",
+  success: "Send success",
 };
 
 export const HOME_MESSAGE = {

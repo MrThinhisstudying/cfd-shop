@@ -18,7 +18,7 @@ const GetDealSection = ({ onSubscribeDeal }) => {
       <div
         className="cta cta-separator cta-border-image cta-half mb-0"
         style={{
-          backgroundImage: "url(/src/assets/images/demos/demo-3/bg-2.jpg)",
+          backgroundImage: "url(/assets/images/demos/demo-3/bg-2.jpg)",
         }}
       >
         <div className="cta-border-wrapper bg-white">
